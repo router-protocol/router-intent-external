@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { ExternalResponseData, Response,TokenData, ExternalQuoteData } from "./interface";
-import {getEncodedFunctionValue, abiEncode} from "./utils"
+import {getEncodedFunctionValue, abiEncode, GetExternalBatchHandlerAddress} from "./utils"
 import {getForwarderQuotesRequest, getForwarderEncodedDataRequest, getSwapEncodedDataRequest} from "./axios";
 import {batchHandlerAbi} from "./constant/batchHandlerAbi"
 import {NATIVE} from "./constant"
@@ -75,7 +75,7 @@ async function main(): Promise<Response> {
   const tokens = [sourceToken.address]; // Token address being supplied to the batch handler.
   const amounts = [sourceAmount]; // Amount of the token to be supplied to the batch handler. Ensure it's greater than 12 to avoid failures.
 
-  const sourceBatchHandler = ""; // The batch handler contract that processes all the transactions.
+  const sourceBatchHandler = GetExternalBatchHandlerAddress(Number(sourceChain)); // The batch handler contract that processes all the transactions.
   if (String(sourceChain) == String(destinationChain)) {
     // For same-chain operations (e.g., swapping MATIC for USDC on the same chain).
 
