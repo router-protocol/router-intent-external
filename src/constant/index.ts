@@ -1,0 +1,2 @@
+export const NATIVE = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
+export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
