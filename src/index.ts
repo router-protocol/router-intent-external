@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, MaxUint256 } from "ethers";
 import { ExternalResponseData, Response,TokenData, ExternalQuoteData } from "./interface";
 import {getEncodedFunctionValue, abiEncode, GetExternalBatchHandlerAddress} from "./utils"
 import {getForwarderQuotesRequest, getForwarderEncodedDataRequest, getSwapEncodedDataRequest} from "./axios";
@@ -13,7 +13,7 @@ async function getAdapterData(data: ExternalQuoteData): Promise<ExternalResponse
 
   const calldata = abiEncode(
     ["address", "uint256"],
-    [data.receiverAddress, data.amount]
+    [data.receiverAddress, MaxUint256]
   );
 
   // Returning the structured response, including the calldata and token information.
