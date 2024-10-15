@@ -5,17 +5,16 @@ import {getForwarderQuotesRequest, getForwarderEncodedDataRequest, getSwapEncode
 import {batchHandlerAbi} from "./constant/batchHandlerAbi"
 import {NATIVE} from "./constant"
 async function getAdapterData(data: ExternalQuoteData): Promise<ExternalResponseData> 
+// PENPIE STAKE PENDLE
 {
-  const target = "" // The deployed adapter contract address goes here.
+  const target = "0xD4Bd2bA9CED0aE7A951061fa5Fbc14C6FfdfC184" // The deployed adapter contract address goes here.
   const callType = 2; // Always send 2 for the call type.
   const value = 0;  // Always send 0 for the value field (as no ETH is transferred).
 
- // Encoding the function call with the provided data.
   const calldata = abiEncode(
-    ["address", "address"],
-    [data, data.refundAddress]
-  ); 
-  // Always make sure to encode refundAddress at last adapter, as you want the funds to go directly to user not Batch Trnx
+    ["address", "uint256"],
+    [data.receiverAddress, data.amount]
+  );
 
   // Returning the structured response, including the calldata and token information.
   const response: ExternalResponseData = {
@@ -23,7 +22,7 @@ async function getAdapterData(data: ExternalQuoteData): Promise<ExternalResponse
     target: target,
     callType: callType,
     valueType: value, // Type of value, set to 0.
-    destAmount: data.amount, // Amount after the adapter is called. Set to 0 if no further adapters will be called.
+    destAmount: "0", // Amount after the adapter is called. Set to 0 if no further adapters will be called.
     destToken: data.destinationToken, // Destination token after the adapter is called. Empty if no further adapters will be called.
     destChainId: data.destinationToken.chainId, // Destination chain ID for cross-chain operations.
   };
@@ -37,27 +36,24 @@ async function getAdapterData(data: ExternalQuoteData): Promise<ExternalResponse
  * @returns {Promise<Response>} - Returns the final encoded transaction data and related information.
  */
 async function main(): Promise<Response> {
-  const userAddress = ""; // The user's wallet address initiating the transaction.
+  const userAddress = "0xF23CE9CCc0714Be94349D918b61826021b5BF07e"; // The user's wallet address initiating the transaction.
 
   // Defining the source token the user will be swapping (e.g., MATIC on Polygon).
   const sourceToken = {
-    chainId: "137",
+    chainId: "8453",
     address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-    name: "MATIC",
-    symbol: "MATIC",
+    name: "ETH",
+    symbol: "ETH",
     decimals: 18,
   };
 
   // Defining the destination token needed by the adapter (e.g., USDC on Base).
   const destToken = {
-    chainId: "8453",
-    address: "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
-    name: "USDC",
-    symbol: "USDC",
-    decimals: 6,
-    resourceID: "usdc-circle",
-    isMintable: false,
-    isWrappedAsset: false,
+    chainId: "42161",
+    address: "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+    name: "PENDLE",
+    symbol: "PENDLE",
+    decimals: 18
   };
 
   const sourceChain = sourceToken.chainId;
